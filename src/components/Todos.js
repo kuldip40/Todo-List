@@ -1,15 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import Todo from "./Todo";
 
-const Todos = ({ todos, onEditTodo, onDeleteTodo }) => {
-  //   console.log(todos);
+const Todos = () => {
+  const state = useSelector((state) => state.todos);
+  const { todos } = state;
+
   const renderTodo = todos.map(({ id, todo }) => (
-    <Todo
-      key={id}
-      todo={{ id, todo }}
-      onEditTodo={onEditTodo}
-      onDeleteTodo={onDeleteTodo}
-    />
+    <Todo key={id} todo={{ id, todo }} />
   ));
 
   return (

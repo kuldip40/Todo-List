@@ -1,54 +1,37 @@
 import React, { useCallback, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo, updateTodo, clearSelectedTodo } from "../actions";
 import Todos from "./Todos";
 
 const App = () => {
-  const [todos, setTodos] = useState(
-    JSON.parse(localStorage.getItem("todos")) || []
-  );
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state.todos);
+  const { selectedTodo } = state;
+
   const [todo, setTodo] = useState("");
-  const [isEditable, setIsEditable] = useState(false);
-  const [currentTodo, setCurrentTodo] = useState({});
+  const [currentTodo, setCurrentTodo] = useState(selectedTodo);
+
+  useEffect(() => {
+    setCurrentTodo(selectedTodo);
+  }, [selectedTodo]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!todo) {
       return;
     }
-
-    setTodos((oldTodos) => {
-      return [...oldTodos, { id: new Date().toISOString(), todo }];
-    });
-
+    dispatch(addTodo(todo));
     setTodo("");
   };
 
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
-
-  const onEditTodo = useCallback((todo) => {
-    setCurrentTodo(todo);
-    setIsEditable(true);
-  }, []);
-
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    const updatedTodos = todos.map((todo) =>
-      todo.id === currentTodo.id ? currentTodo : todo
-    );
-    setTodos(updatedTodos);
-    setIsEditable(false);
+    dispatch(updateTodo(currentTodo.id, currentTodo.todo));
   };
-
-  const onDeleteTodo = useCallback((id) => {
-    setTodos((oldTodos) => {
-      return oldTodos.filter((todo) => todo.id !== id);
-    });
-  }, []);
 
   return (
     <div>
-      {isEditable ? (
+      {Object.keys(currentTodo).length > 0 ? (
         <form onSubmit={handleEditSubmit}>
           <label htmlFor="todo"></label>
           <input
@@ -60,7 +43,7 @@ const App = () => {
             }
           />
           <button>update</button>
-          <button onClick={() => setIsEditable(false)}>Cancel</button>
+          <button onClick={() => dispatch(clearSelectedTodo())}>Cancel</button>
         </form>
       ) : (
         <form onSubmit={handleSubmit}>
@@ -75,11 +58,7 @@ const App = () => {
         </form>
       )}
 
-      <Todos
-        todos={todos}
-        onEditTodo={onEditTodo}
-        onDeleteTodo={onDeleteTodo}
-      />
+      <Todos />
     </div>
   );
 };
