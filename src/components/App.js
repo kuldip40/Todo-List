@@ -1,8 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import Todos from "./Todos";
 
 const App = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(
+    JSON.parse(localStorage.getItem("todos")) || []
+  );
   const [todo, setTodo] = useState("");
   const [isEditable, setIsEditable] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({});
@@ -19,6 +21,10 @@ const App = () => {
 
     setTodo("");
   };
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const onEditTodo = useCallback((todo) => {
     setCurrentTodo(todo);
