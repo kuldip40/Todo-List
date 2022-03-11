@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import Todo from "./Todo";
+import { Grid } from "semantic-ui-react";
 
 const Todos = () => {
   const state = useSelector((state) => state.todos);
@@ -10,11 +11,7 @@ const Todos = () => {
     <Todo key={id} todo={{ id, todo }} />
   ));
 
-  return (
-    <table>
-      <tbody>{renderTodo}</tbody>
-    </table>
-  );
+  return <Grid columns={6}>{renderTodo}</Grid>;
 };
 
 export default React.memo(Todos);
