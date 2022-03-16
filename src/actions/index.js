@@ -15,13 +15,14 @@ export const selectTodo = (id) => {
   };
 };
 
-export const clearSelectedTodo = ()=>{
-  return{
-    type:"CLEAR_SELECTED_TODO"
-  }
-}
+export const clearSelectedTodo = () => {
+  return {
+    type: "CLEAR_SELECTED_TODO",
+  };
+};
 
 export const updateTodo = (id, todo) => {
+  console.log("action", id, todo);
   return {
     type: "UPDATE_TODO",
     payload: {
