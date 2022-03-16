@@ -7,11 +7,6 @@ const todosReducer = (state = INITIAL_VALUE, action) => {
   switch (action.type) {
     case "ADD_TODO":
       return { ...state, todos: [...state.todos, action.payload] };
-    case "SELECT_TODO":
-      return {
-        ...state,
-        selectedTodo: state.todos.find((todo) => todo.id === action.payload),
-      };
     case "UPDATE_TODO":
       return {
         ...state,
@@ -20,8 +15,6 @@ const todosReducer = (state = INITIAL_VALUE, action) => {
         ),
         selectedTodo: {},
       };
-    case "CLEAR_SELECTED_TODO":
-      return { ...state, selectedTodo: {} };
     case "DELETE_TODO":
       return {
         ...state,
